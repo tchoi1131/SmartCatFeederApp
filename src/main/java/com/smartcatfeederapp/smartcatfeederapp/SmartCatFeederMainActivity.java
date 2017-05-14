@@ -19,6 +19,9 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.regions.Regions;
+
 public class SmartCatFeederMainActivity extends AppCompatActivity {
 
     /**
@@ -62,9 +65,7 @@ public class SmartCatFeederMainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -137,7 +138,15 @@ public class SmartCatFeederMainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch(position){
+                case 0:
+                    return ConsumptionHistoryFragment.newInstance(1);
+                case 1:
+                    return PlaceholderFragment.newInstance(position + 1);
+                default:
+                    return PlaceholderFragment.newInstance(position + 1);
+            }
+
         }
 
         @Override
@@ -150,11 +159,11 @@ public class SmartCatFeederMainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "Consumption History (List)";
                 case 1:
-                    return "SECTION 2";
+                    return "Consumption History (Chart)";
                 case 2:
-                    return "SECTION 3";
+                    return "Ad-hoc feed";
             }
             return null;
         }
