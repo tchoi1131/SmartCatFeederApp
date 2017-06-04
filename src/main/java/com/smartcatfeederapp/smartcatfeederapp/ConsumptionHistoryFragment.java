@@ -10,11 +10,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedScanList;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A fragment representing a list of Items.
@@ -34,6 +40,13 @@ public class ConsumptionHistoryFragment extends Fragment {
 
     private DynamoDBClientManager ddbClientMgr;
     private ArrayList<DailyConsumption> dailyConsumptions = new ArrayList<DailyConsumption>();
+
+    private EditText fromDateET;
+    private EditText toDateET;
+    private Button refreshBtn;
+
+    private String fromDateStr;
+    private String toDateStr;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -64,15 +77,19 @@ public class ConsumptionHistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_consumptionhistory_list, container, false);
+        View outerView = inflater.inflate(R.layout.fragment_consumptionhistory_list, container, false);
+        View listView = outerView.findViewById(R.id.food_consump_list);
+        fromDateET = (EditText) outerView.findViewById(R.id.from_date_et);
+        toDateET = (EditText) outerView.findViewById(R.id.to_date_et);
+        refreshBtn = (Button) outerView.findViewById(R.id.refresh_btn);
 
         ddbClientMgr = new DynamoDBClientManager(getContext().getApplicationContext(),
                 getResources().getString(R.string.identity_pool_id));
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+        if (listView instanceof RecyclerView) {
+            Context context = listView.getContext();
+            RecyclerView recyclerView = (RecyclerView) listView;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -82,20 +99,36 @@ public class ConsumptionHistoryFragment extends Fragment {
             recyclerView.setAdapter(adapter);
         }
 
+        fromDateStr = String.valueOf(fromDateET.getText());
+        toDateStr = String.valueOf(toDateET.getText());
         new GetUserListTask().execute();
 
-        return view;
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fromDateStr = String.valueOf(fromDateET.getText());
+                toDateStr = String.valueOf(toDateET.getText());
+                new GetUserListTask().execute();
+            }
+        });
+
+        return outerView;
     }
 
     private class GetUserListTask extends AsyncTask<Void, Void, Void> {
 
         protected Void doInBackground(Void... inputs) {
-
             DynamoDBMapper mapper = new DynamoDBMapper(ddbClientMgr.getDdb());
-            //Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-            //eav.put(":val1", new AttributeValue().withS("SmartCatFeeder"));
+            Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+            eav.put(":feederId", new AttributeValue().withS("SmartCatFeeder"));
+            eav.put(":fromDate", new AttributeValue().withN(fromDateStr));
+            eav.put(":toDate", new AttributeValue().withN(toDateStr));
 
-            DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();//.withFilterExpression("feederId = :val1");
+            DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
+                    .addExpressionAttributeNamesEntry("#feedDate","date")
+                    .withFilterExpression("feederId = :feederId and #feedDate >= :fromDate and #feedDate <= :toDate")
+                    .withExpressionAttributeValues(eav);
+
             PaginatedScanList<DailyConsumption> result = mapper.scan(
                     DailyConsumption.class, scanExpression);
 
@@ -111,25 +144,6 @@ public class ConsumptionHistoryFragment extends Fragment {
             adapter.notifyDataSetChanged();
         }
     }
-
-/*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-*/
 
     /**
      * This interface must be implemented by activities that contain this

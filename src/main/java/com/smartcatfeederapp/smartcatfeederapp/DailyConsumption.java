@@ -14,6 +14,7 @@ public class DailyConsumption {
     private String feederId;
     private int date;
     private double consumption;
+    private double catWeight;
 
     @DynamoDBHashKey(attributeName = "feederId")
     public String getFeederId() {
@@ -40,5 +41,14 @@ public class DailyConsumption {
 
     public void setConsumption(double consumption) {
         this.consumption = consumption;
+    }
+
+    @DynamoDBAttribute(attributeName = "catWeight")
+    public double getCatWeight() {
+        return catWeight;
+    }
+
+    public void setCatWeight(double catWeight) {
+        this.catWeight = catWeight;
     }
 }
