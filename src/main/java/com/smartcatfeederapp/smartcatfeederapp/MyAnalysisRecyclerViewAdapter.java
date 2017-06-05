@@ -7,21 +7,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.smartcatfeederapp.smartcatfeederapp.AnalysisFragment.OnListFragmentInteractionListener;
-import com.smartcatfeederapp.smartcatfeederapp.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link AnalysisResult} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyAnalysisRecyclerViewAdapter extends RecyclerView.Adapter<MyAnalysisRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<AnalysisResult> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyAnalysisRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyAnalysisRecyclerViewAdapter(List<AnalysisResult> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -36,8 +35,9 @@ public class MyAnalysisRecyclerViewAdapter extends RecyclerView.Adapter<MyAnalys
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mMonthView.setText(String.valueOf(mValues.get(position).getMonth()));
+        holder.mAvgConsumptionView.setText(String.valueOf(mValues.get(position).getAvgConsumption()));
+        holder.mNetCatWeightView.setText(String.valueOf(mValues.get(position).getNetCatWeight()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,20 +58,22 @@ public class MyAnalysisRecyclerViewAdapter extends RecyclerView.Adapter<MyAnalys
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final TextView mMonthView;
+        public final TextView mAvgConsumptionView;
+        public final TextView mNetCatWeightView;
+        public AnalysisResult mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mMonthView = (TextView) view.findViewById(R.id.month);
+            mAvgConsumptionView = (TextView) view.findViewById(R.id.avg_consumption);
+            mNetCatWeightView = (TextView) view.findViewById(R.id.net_cat_weight);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mMonthView.getText() + "'";
         }
     }
 }

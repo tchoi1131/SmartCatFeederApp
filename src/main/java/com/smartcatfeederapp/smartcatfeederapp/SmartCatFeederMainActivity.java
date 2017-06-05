@@ -133,7 +133,7 @@ public class SmartCatFeederMainActivity extends AppCompatActivity {
                 case 0:
                     return ConsumptionHistoryFragment.newInstance(1);
                 case 1:
-                    return PlaceholderFragment.newInstance(position + 1);
+                    return AnalysisFragment.newInstance(1);
                 default:
                     return PlaceholderFragment.newInstance(position + 1);
             }
@@ -152,7 +152,7 @@ public class SmartCatFeederMainActivity extends AppCompatActivity {
                 case 0:
                     return "Consumption History (List)";
                 case 1:
-                    return "Consumption History (Chart)";
+                    return "Analysis";
                 case 2:
                     return "Ad-hoc feed";
             }

@@ -101,21 +101,21 @@ public class ConsumptionHistoryFragment extends Fragment {
 
         fromDateStr = String.valueOf(fromDateET.getText());
         toDateStr = String.valueOf(toDateET.getText());
-        new GetUserListTask().execute();
+        new GetConsumptionHistory().execute();
 
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fromDateStr = String.valueOf(fromDateET.getText());
                 toDateStr = String.valueOf(toDateET.getText());
-                new GetUserListTask().execute();
+                new GetConsumptionHistory().execute();
             }
         });
 
         return outerView;
     }
 
-    private class GetUserListTask extends AsyncTask<Void, Void, Void> {
+    private class GetConsumptionHistory extends AsyncTask<Void, Void, Void> {
 
         protected Void doInBackground(Void... inputs) {
             DynamoDBMapper mapper = new DynamoDBMapper(ddbClientMgr.getDdb());
