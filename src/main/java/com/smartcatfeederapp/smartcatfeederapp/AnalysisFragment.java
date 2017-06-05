@@ -135,9 +135,9 @@ public class AnalysisFragment extends Fragment {
             analysisResults.clear();
             int prevMonth = 0;
             double curCatWeight = 0;
-            int numOfDays = 0;
+            double numOfDays = 0;
             double consumptionSum = 0;
-            double catWeightSum = 0;
+            double prevCatWeight = 0;
             Boolean firstMonth = true;
 
             for (DailyConsumption dc : result) {
@@ -146,24 +146,24 @@ public class AnalysisFragment extends Fragment {
 
                 if(firstMonth){
                     prevMonth = curMonth;
+                    prevCatWeight = curCatWeight;
                     firstMonth = false;
                 }
                 if(prevMonth != curMonth) {
-                    AnalysisResult analysisResult = new AnalysisResult(prevMonth,consumptionSum / numOfDays,curCatWeight - (catWeightSum / numOfDays));
+                    AnalysisResult analysisResult = new AnalysisResult(prevMonth,consumptionSum / numOfDays,curCatWeight - prevCatWeight);
                     analysisResults.add(analysisResult);
                     consumptionSum = 0;
-                    catWeightSum = 0;
                     numOfDays = 0;
+                    prevCatWeight = curCatWeight;
                     prevMonth = curMonth;
                 }
 
-                catWeightSum += dc.getCatWeight();
                 consumptionSum += dc.getConsumption();
                 numOfDays++;
             }
 
             if(!firstMonth){
-                AnalysisResult analysisResult = new AnalysisResult(prevMonth,consumptionSum/numOfDays, curCatWeight -  (catWeightSum / numOfDays));
+                AnalysisResult analysisResult = new AnalysisResult(prevMonth,consumptionSum/numOfDays, curCatWeight - prevCatWeight);
                 analysisResults.add(analysisResult);
             }
 
