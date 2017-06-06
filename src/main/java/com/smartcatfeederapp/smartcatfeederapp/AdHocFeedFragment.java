@@ -77,10 +77,10 @@ public class AdHocFeedFragment extends Fragment {
     private TextView feedingAmtTV;
     private EditText addfeedingAmtET;
     private Button feedBtn;
+    private Button refreshBtn;
 
     private DailyFeedingAmount dailyFeedingAmount;
     private boolean connected = false;
-    private boolean receivedShadow = false;
 
     public AdHocFeedFragment() {
         // Required empty public constructor
@@ -105,6 +105,7 @@ public class AdHocFeedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_ad_hoc_feed, container, false);
         feedingAmtTV = (TextView) view.findViewById(R.id.feeding_amt_tv);
         feedBtn = (Button) view.findViewById(R.id.feed_btn);
+        refreshBtn = (Button) view.findViewById(R.id.refresh_btn);
         addfeedingAmtET = (EditText) view.findViewById(R.id.add_feedin_amt_et);
 
         ddbClientMgr = new DynamoDBClientManager(getContext().getApplicationContext(),
@@ -112,6 +113,13 @@ public class AdHocFeedFragment extends Fragment {
 
         feedingAmtTV.setText(getString(R.string.todays_feedin_amt, "0"));
         new GetFeedingAmountTask().execute();
+
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new GetFeedingAmountTask().execute();
+            }
+        });
 
         feedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
