@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">SmartCatFeederApp</string>
     <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
     <string name="identity_pool_id">us-west-2:f4c3c773-52d6-4a7c-b934-588065facb2b</string>
+    <string name="iot_end_point">a23lr1f9nedqrs.iot.us-west-2.amazonaws.com</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="todays_feedin_amt">Total amount: %1$s lb</string>
 </resources>
