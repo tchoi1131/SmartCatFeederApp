@@ -111,7 +111,7 @@ public class AdHocFeedFragment extends Fragment {
         ddbClientMgr = new DynamoDBClientManager(getContext().getApplicationContext(),
                 getResources().getString(R.string.identity_pool_id));
 
-        feedingAmtTV.setText(getString(R.string.todays_feedin_amt, "0"));
+        feedingAmtTV.setText("0");
         new GetFeedingAmountTask().execute();
 
         refreshBtn.setOnClickListener(new View.OnClickListener() {
