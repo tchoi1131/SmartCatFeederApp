@@ -148,7 +148,7 @@ public class AnalysisFragment extends Fragment {
                     firstMonth = false;
                 }
                 if(prevMonth != curMonth) {
-                    AnalysisResult analysisResult = new AnalysisResult(prevMonth,consumptionSum / numOfDays,curCatWeight - prevCatWeight);
+                    AnalysisResult analysisResult = new AnalysisResult(prevMonth, Math.round((consumptionSum / numOfDays)*100.0)/ 100.0,curCatWeight - prevCatWeight);
                     analysisResults.add(analysisResult);
                     consumptionSum = 0;
                     numOfDays = 0;
@@ -161,7 +161,7 @@ public class AnalysisFragment extends Fragment {
             }
 
             if(!firstMonth){
-                AnalysisResult analysisResult = new AnalysisResult(prevMonth,consumptionSum/numOfDays, curCatWeight - prevCatWeight);
+                AnalysisResult analysisResult = new AnalysisResult(prevMonth,Math.round((consumptionSum / numOfDays)*100.0)/ 100.0, curCatWeight - prevCatWeight);
                 analysisResults.add(analysisResult);
             }
 
